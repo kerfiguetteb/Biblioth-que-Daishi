@@ -37,21 +37,21 @@ class LivreType extends AbstractType
                     ;
                 },
             ])
-            ->add('emprunts', EntityType::class, [
-                'class' => Emprunt::class,
-                'choice_label' => function(User $emprunt) {
-                    return "{$emprunt->getDateEmprunt()} {$emprunt->getDateRetour()}";
-                },
-                'by_reference' => false,
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('e')
-                        ->orderBy('e.date_emprunt', 'ASC')
-                        ->orderBy('l.date_retour', 'ASC')
-                    ;
-                },
-                'multiple' => true,
-                'by_reference' => false,
-            ])
+            // ->add('emprunts', EntityType::class, [
+            //     'class' => Emprunt::class,
+            //     'choice_label' => function(User $emprunt) {
+            //         return "{$emprunt->getDateEmprunt()} {$emprunt->getDateRetour()}";
+            //     },
+            //     'by_reference' => false,
+            //     'query_builder' => function (EntityRepository $er) {
+            //         return $er->createQueryBuilder('e')
+            //             ->orderBy('e.date_emprunt', 'ASC')
+            //             ->orderBy('l.date_retour', 'ASC')
+            //         ;
+            //     },
+            //     'multiple' => true,
+            //     'by_reference' => false,
+            // ])
         
 
 
@@ -62,7 +62,6 @@ class LivreType extends AbstractType
             'choice_label' => function(Genre $genre) {
                 return "{$genre->getNom()}";
             },
-            // Les school years sont triés par ordre croissant (c-à-d alphabétique) du champ name
             'query_builder' => function (EntityRepository $er) {
                 return $er->createQueryBuilder('g')
                         ->orderBy('g.nom', 'ASC')

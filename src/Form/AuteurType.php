@@ -17,21 +17,6 @@ class AuteurType extends AbstractType
         $builder
             ->add('nom')
             ->add('prenom')
-            ->add('livres', EntityType::class, [
-                'class' => Livre::class,
-                'choice_label' => function(User $livre) {
-                    return "{$livre->getNom()} {$livre->getPrenom()}";
-                },
-                'by_reference' => false,
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('l')
-                        ->orderBy('l.nom', 'ASC')
-                        ->orderBy('l.prenom', 'ASC')
-                    ;
-                },
-                'multiple' => true,
-                'by_reference' => false,
-            ])
         ;
     }
 

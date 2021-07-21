@@ -3,7 +3,10 @@
 namespace App\Form;
 
 use App\Entity\Emprunt;
+use App\Entity\Emprunteur;
 use App\Entity\Livre;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -18,11 +21,9 @@ class EmpruntType extends AbstractType
             ->add('livre', EntityType::class,
             [
                 'class' => Livre::class,
-            // Le label qui est affiché utilisera le nom de la school year
             'choice_label' => function(Livre $livre) {
                 return "{$livre->getTitre()}";
             },
-            // Les school years sont triés par ordre croissant (c-à-d alphabétique) du champ name
             'query_builder' => function (EntityRepository $er) {
                 return $er->createQueryBuilder('l')
                         ->orderBy('l.titre', 'ASC')
@@ -30,7 +31,19 @@ class EmpruntType extends AbstractType
                 },
             ])
 
-            ->add('emprunteur')
+            ->add('emprunteur', EntityType::class,
+            [
+                'class' => Emprunteur::class,
+            'choice_label' => function(Emprunteur $emprunteur) {
+                return "{$emprunteur->getNom()} {$emprunteur->getPrenom()}";
+            },
+            'query_builder' => function (EntityRepository $er) {
+                return $er->createQueryBuilder('e')
+                ->orderBy('e.nom', 'ASC')
+                ->orderBy('e.prenom', 'ASC')
+                ;
+                },
+            ])
         ;
     }
 
