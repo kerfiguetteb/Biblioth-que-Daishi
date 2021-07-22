@@ -112,9 +112,9 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         if (in_array('ROLE_ADMIN', $user->getRoles())) {
             $url = $this->urlGenerator->generate('emprunteur_index');
         } elseif (in_array('ROLE_EMPRUNTEUR', $user->getRoles())) {
-            $student = $this->emprunteurRepository->findOneByUser($user);
+            $emprunteur = $this->emprunteurRepository->findOneByUser($user);
 
-            if (!$student) {
+            if (!$emprunteur) {
                 throw new \Exception("Cet utilisateur n'est rattaché à aucun profil : {$user->getId()} {$user->getEmail()}");
             }
 

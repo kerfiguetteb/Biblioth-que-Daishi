@@ -20,7 +20,7 @@
         {% for livre in livres %}
             <tr>
                 <td>{{ livre.id }}</td>
-                <td>{{ livre.titre }}</td>
+                <td><a href="{{ path('livre_show', {'id': livre.id}) }}">{{ livre.titre }} </a></td>
                 <td>{{ livre.anneeEdition }}</td>
                 <td>{{ livre.nombrePages }}</td>
                 <td>{{ livre.codeIsbn }}</td>

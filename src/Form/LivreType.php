@@ -26,11 +26,9 @@ class LivreType extends AbstractType
             ->add('auteur', EntityType::class,
             [
                 'class' => Auteur::class,
-            // Le label qui est affiché utilisera le nom de la school year
             'choice_label' => function(Auteur $auteur) {
                 return "{$auteur->getNom()}";
             },
-            // Les school years sont triés par ordre croissant (c-à-d alphabétique) du champ name
             'query_builder' => function (EntityRepository $er) {
                 return $er->createQueryBuilder('a')
                         ->orderBy('a.nom', 'ASC')
@@ -42,11 +40,11 @@ class LivreType extends AbstractType
             //     'choice_label' => function(User $emprunt) {
             //         return "{$emprunt->getDateEmprunt()} {$emprunt->getDateRetour()}";
             //     },
-            //     'by_reference' => false,
+            //     // 'by_reference' => false,
             //     'query_builder' => function (EntityRepository $er) {
             //         return $er->createQueryBuilder('e')
             //             ->orderBy('e.date_emprunt', 'ASC')
-            //             ->orderBy('l.date_retour', 'ASC')
+            //             ->orderBy('e.date_retour', 'ASC')
             //         ;
             //     },
             //     'multiple' => true,

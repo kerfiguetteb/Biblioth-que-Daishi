@@ -15,20 +15,18 @@ class GenreType extends AbstractType
         $builder
             ->add('nom')
             ->add('description')
-            ->add('livres', EntityType::class,
-            [
-                'class' => Genre::class,
-            // Le label qui est affiché utilisera le nom de la school year
-            'choice_label' => function(Genre $genre) {
-                return "{$auteur->getNom()}";
-            },
-            // Les school years sont triés par ordre croissant (c-à-d alphabétique) du champ name
-            'query_builder' => function (EntityRepository $er) {
-                return $er->createQueryBuilder('g')
-                        ->orderBy('g.nom', 'ASC')
-                    ;
-                },
-            ])
+            // ->add('livres', EntityType::class,
+            // [
+            //     'class' => Genre::class,
+            // 'choice_label' => function(Genre $genre) {
+            //     return "{$genre->getNom()}";
+            // },
+            // 'query_builder' => function (EntityRepository $er) {
+            //     return $er->createQueryBuilder('g')
+            //             ->orderBy('g.nom', 'ASC')
+            //         ;
+            //     },
+            // ])
 
       ;
     }
