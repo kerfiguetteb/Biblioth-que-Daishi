@@ -19,6 +19,15 @@
                 <th>Date_retour</th>
                 <td>{{ emprunt.dateRetour ? emprunt.dateRetour|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
+            <tr>
+                <th>livre</th>
+                <td>{{ emprunt.livre.titre }} {{ emprunt.livre.codeIsbn }} </td>      
+            </tr>
+            <tr>
+                <th>emprunteur</th>
+                <td>{{ emprunt.emprunteur.nom }} {{ emprunt.emprunteur.prenom }} </td>      
+            </tr>
+
         </tbody>
     </table>
 

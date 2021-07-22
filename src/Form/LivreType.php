@@ -60,11 +60,13 @@ class LivreType extends AbstractType
             'choice_label' => function(Genre $genre) {
                 return "{$genre->getNom()}";
             },
+            'by_reference' => false,
             'query_builder' => function (EntityRepository $er) {
                 return $er->createQueryBuilder('g')
                         ->orderBy('g.nom', 'ASC')
                     ;
                 },
+                'multiple' => true,
             ])
 
       ;

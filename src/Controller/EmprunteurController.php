@@ -32,7 +32,7 @@ class EmprunteurController extends AbstractController
     /**
      * @Route("/new", name="emprunteur_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
         $emprunteur = new Emprunteur();
         $form = $this->createForm(EmprunteurType::class, $emprunteur);
@@ -80,7 +80,7 @@ class EmprunteurController extends AbstractController
     /**
      * @Route("/{id}/edit", name="emprunteur_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Emprunteur $emprunteur, EmprunteurRepository $emprunteurRepository, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function edit(Request $request, Emprunteur $emprunteur, UserPasswordEncoderInterface $passwordEncoder): Response
     {
         $response = $this->redirectEmprunteur('emprunteur_edit', $emprunteur, $emprunteurRepository);
 
@@ -117,7 +117,7 @@ class EmprunteurController extends AbstractController
      */
     public function delete(Request $request, Emprunteur $emprunteur): Response
     {
-        if ($this->isGranted('ROLE_EMPRUNTEUR')) {
+        if ($this->isGranted('ROLE_ADMIN')) {
             throw new AccessDeniedException();
         }
 
@@ -127,7 +127,7 @@ class EmprunteurController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('emprunteur_index');
+        return $this->redirectToRoute('emprunt_index');
     }
 
     private function redirectEmprunteur(string $route, Emprunteur $emprunteur, EmprunteurRepository $emprunteurRepository)
@@ -136,7 +136,7 @@ class EmprunteurController extends AbstractController
         $user = $this->getUser();
 
         // On vérifie si l'utilisateur est un emprunteur 
-        if (in_array('ROLE_EMPRUNTEUR', $user->getRoles())) {
+        if (in_array('ROLE_ADMIN', $user->getRoles())) {
             // if ($this->isGranted('ROLE_EMPRUNTEUR')) {
                 // Récupèration du profil emprunteur
             $userEmprunteur = $emprunteurRepository->findOneByUser($user);

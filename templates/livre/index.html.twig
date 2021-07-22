@@ -13,7 +13,10 @@
                 <th>Annee_edition</th>
                 <th>Nombre_pages</th>
                 <th>Code_isbn</th>
+                {% if is_granted('ROLE_ADMIN') %}
                 <th>actions</th>
+                {% endif %}
+
             </tr>
         </thead>
         <tbody>
@@ -25,8 +28,11 @@
                 <td>{{ livre.nombrePages }}</td>
                 <td>{{ livre.codeIsbn }}</td>
                 <td>
+                    {% if is_granted('ROLE_ADMIN') %}
                     <a href="{{ path('livre_show', {'id': livre.id}) }}">show</a>
                     <a href="{{ path('livre_edit', {'id': livre.id}) }}">edit</a>
+                    {% endif %}
+
                 </td>
             </tr>
         {% else %}
@@ -36,6 +42,8 @@
         {% endfor %}
         </tbody>
     </table>
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('livre_new') }}">Create new</a>
+    {% endif %}
 
-    <a href="{{ path('livre_new') }}">Create new</a>
 {% endblock %}
