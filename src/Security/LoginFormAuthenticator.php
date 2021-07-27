@@ -4,6 +4,7 @@ namespace App\Security;
 
 use App\Entity\User;
 use App\Repository\EmprunteurRepository;
+use App\Repository\EmpruntRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,6 +32,8 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     private $urlGenerator;
     private $csrfTokenManager;
     private $passwordEncoder;
+    private $emprunteurRepository;
+    private $empruntRepository;
 
     public function __construct(
     
@@ -38,7 +41,8 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     UrlGeneratorInterface $urlGenerator, 
     CsrfTokenManagerInterface $csrfTokenManager,
     UserPasswordEncoderInterface $passwordEncoder,
-    EmprunteurRepository $emprunteurRepository
+    EmprunteurRepository $emprunteurRepository,
+    EmpruntRepository $empruntRepository
 
     )
     {
@@ -47,6 +51,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
         $this->emprunteurRepository = $emprunteurRepository;
+        $this->empruntRepository = $empruntRepository;
 
     }
 
@@ -110,17 +115,10 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 
 
         if (in_array('ROLE_ADMIN', $user->getRoles())) {
-            $url = $this->urlGenerator->generate('emprunteur_index');
+            $url = $this->urlGenerator->generate('user_index');
         } elseif (in_array('ROLE_EMPRUNTEUR', $user->getRoles())) {
-            $emprunteur = $this->emprunteurRepository->findOneByUser($user);
+            $url = $this->urlGenerator->generate('emprunt_index');
 
-            if (!$emprunteur) {
-                throw new \Exception("Cet utilisateur n'est rattaché à aucun profil : {$user->getId()} {$user->getEmail()}");
-            }
-
-            $url = $this->urlGenerator->generate('emprunteur_show', [
-                'id' => $emprunteur->getId(),
-            ]);
         } else {
             throw new \Exception("Votre rôle n'est pas reconnu");
         }

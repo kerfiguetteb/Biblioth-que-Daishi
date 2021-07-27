@@ -182,4 +182,15 @@ class Livre
 
         return $this;
     }
+    public function isAvailable(): bool
+    {
+
+        foreach ($this->getEmprunts() as $emprunt) {
+            if ($emprunt->getDateRetour() == null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

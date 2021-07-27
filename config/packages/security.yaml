@@ -34,5 +34,47 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+
+        # Tous les chemins commençant par "/emprunteur/id/edit" ne sont accessibles qu'aux roles admin ou emprunteur
+        # La partie "id" du chemin doit être une suite chiffres
+        # Cette route correspond à la modification d'un emprunteur
+        - { path: "^/emprunteur/[0-9]+/edit", roles: [ROLE_ADMIN, ROLE_EMPRUNTEUR] }
+
+        # Tous les chemins demandés commençant par "/student/id" ne sont accessibles qu'aux roles admin ou student.
+        # Cette route correspond à la consultation ou la suppression d'un student
+        # Pour bloquer l'accès à la suppression d'un student par un role student,
+        # on va implémenter la détection dans le contrôleur.
+        - { path: "^/emprunteur/[0-9]+/?$", roles: [ROLE_ADMIN, ROLE_EMPRUNTEUR] }
+
+        # Tous les chemins commençant par "/student/new" ne sont accessibles qu'aux roles admin
+        # Cette route correspond à la création d'une school year
+        - { path: "^/emprunteur/new", roles: [ROLE_ADMIN] }
+
+        # Tous les chemins commençant par "/emprunteur" ne sont accessibles qu'aux roles admin ou emprunteur.
+        # Cette route correspond à la consultation de la liste des emprunteurs
+        - { path: ^/emprunteur, roles: [ROLE_ADMIN, ROLE_EMPRUNTEUR] }
+
+
+
+        # Tous les chemins commençant par "/emprunt/id/edit" ne sont accessibles qu'au role admin
+        # La partie "id" du chemin doit être une suite chiffres
+        # Cette route correspond à la modification d'une school year
+        # Pour bloquer l'accès à la suppression d'une school year par un role EMPRUNTEUR,
+        # on va implémenter la détection dans le contrôleur.
+        - { path: "^/emprunt/[0-9]+/edit", roles: [ROLE_ADMIN] }
+
+        # Tous les chemins demandés commençant par "/emprunts/id" ne sont accessibles qu'aux roles admin ou EMPRUNTEUR.
+        # Cette route correspond à la consultation ou la suppression d'une school year
+        # Pour bloquer l'accès à la suppression d'un school year par un role EMPRUNTEUR,
+        # on va implémenter la détection dans le contrôleur.
+        - { path: "^/emprunt/[0-9]+/?$", roles: [ROLE_ADMIN, ROLE_EMPRUNTEUR] }
+
+        # Tous les chemins commençant par "/emprunts/new" ne sont accessibles qu'aux roles admin
+        # Cette route correspond à la création d'une school year
+        - { path: "^/emprunt/new", roles: [ROLE_ADMIN] }
+
+        # Tous les chemins commençant par "/emprunts" ne sont accessibles qu'aux roles admin ou EMPRUNTEUR.
+        # Cette route correspond à la consultation de la liste des school years
+        - { path: ^/emprunt, roles: [ROLE_ADMIN, ROLE_EMPRUNTEUR] }

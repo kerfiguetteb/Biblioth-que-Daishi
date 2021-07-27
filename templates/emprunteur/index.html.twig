@@ -3,7 +3,7 @@
 {% block title %}Emprunteur index{% endblock %}
 
 {% block body %}
-    <h1>Emprunteur index</h1>
+    <h1>Emprunteurs</h1>
 
     <table class="table">
         <thead>
@@ -30,7 +30,10 @@
                 <td>{{ emprunteur.dateModification ? emprunteur.dateModification|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
                     <a href="{{ path('emprunteur_show', {'id': emprunteur.id}) }}">show</a>
+                        {% if is_granted('ROLE_ADMIN') %}
                     <a href="{{ path('emprunteur_edit', {'id': emprunteur.id}) }}">edit</a>
+                        {% endif %}
+
                 </td>
             </tr>
         {% else %}
@@ -40,6 +43,8 @@
         {% endfor %}
         </tbody>
     </table>
-
+        {% if is_granted('ROLE_ADMIN') %}
     <a href="{{ path('emprunteur_new') }}">Create new</a>
+        {% endif %}
+
 {% endblock %}

@@ -31,11 +31,12 @@ class EmprunteurRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('e')
             ->innerJoin('e.user','u')    
             ->andWhere('e.user = :user')
+            ->andWhere("u.roles LIKE '%ROLE_EMPRUNTEUR%'")
             ->setParameter('user', $user)
             ->orderBy('e.id', 'ASC')
             // ->setMaxResults(10)
             ->getQuery()
-            ->getResult()
+            ->getOneOrNullResult()
         ;
     }
     

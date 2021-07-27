@@ -3,12 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\Emprunt;
+use App\Entity\Emprunteur;
 use App\Form\EmpruntType;
 use App\Repository\EmpruntRepository;
+use App\Repository\EmprunteurRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
 
 /**
  * @Route("/emprunt")
@@ -18,11 +23,26 @@ class EmpruntController extends AbstractController
     /**
      * @Route("/", name="emprunt_index", methods={"GET"})
      */
-    public function index(EmpruntRepository $empruntRepository): Response
+    public function index(EmpruntRepository $empruntRepository, EmprunteurRepository $emprunteurRepository, Request $request): Response
     {
-        return $this->render('emprunt/index.html.twig', [
-            'emprunts' => $empruntRepository->findAll(),
+        $user = $this->getUser();
+        $emprunts = $empruntRepository->findAll();
+
+        if ($this->isGranted('ROLE_EMPRUNTEUR')) {
+            $emprunteur = $emprunteurRepository->findOneByUser($user);
+            $emprunts = $emprunteur->getEmprunts();
+            
+            return $this->render('emprunt/index.html.twig', [
+            'emprunts' => $emprunts,
         ]);
+    }
+        elseif ($this->isGranted('ROLE_ADMIN')) {
+
+            return $this->render('emprunt/index.html.twig', [
+                'emprunts' => $emprunts,
+            ]);
+    }
+
     }
 
     /**
@@ -39,7 +59,7 @@ class EmpruntController extends AbstractController
             $entityManager->persist($emprunt);
             $entityManager->flush();
 
-            return $this->redirectToRoute('emprunt_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('emprunt_index');
         }
 
         return $this->render('emprunt/new.html.twig', [
@@ -51,8 +71,17 @@ class EmpruntController extends AbstractController
     /**
      * @Route("/{id}", name="emprunt_show", methods={"GET"})
      */
-    public function show(Emprunt $emprunt): Response
-    {
+    public function show(Emprunt $emprunt, EmprunteurRepository $emprunteurRepository): Response
+    { 
+        
+        if ($this->isGranted('ROLE_EMPRUNTEUR')) {
+
+            $user = $this->getUser();
+            $emprunteur = $emprunteurRepository->findOneByUser($user);
+            if (!$emprunteur->getEmprunts()->contains($emprunt)) {
+                throw new NotFoundHttpException();
+            }
+        }
         return $this->render('emprunt/show.html.twig', [
             'emprunt' => $emprunt,
         ]);
@@ -82,13 +111,16 @@ class EmpruntController extends AbstractController
      * @Route("/{id}", name="emprunt_delete", methods={"POST"})
      */
     public function delete(Request $request, Emprunt $emprunt): Response
-    {
+    {        if ($this->isGranted('ROLE_EMPRUNTEUR')) {
+        throw new AccessDeniedException();
+    }
+
         if ($this->isCsrfTokenValid('delete'.$emprunt->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($emprunt);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('emprunt_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('emprunt_index');
     }
 }

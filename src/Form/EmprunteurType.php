@@ -3,7 +3,9 @@
 namespace App\Form;
 
 use App\Entity\Emprunteur;
+use App\Entity\Emprunt;
 use App\Entity\User;
+use App\Form\UserType;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -26,6 +28,19 @@ class EmprunteurType extends AbstractType
                     'class' => 'd-none',
                 ]
             ])
+            ->add('emprunts', EntityType::class, [
+                'class' => Emprunt::class,
+                // La fonction anonyme doit renvoyer une chaîne de caractères
+                // qui contient le texte qui sera utilisé dans le menu déroulant. 
+                'choice_label' => function(Emprunt $emprunt) {
+                    // On renvoit les attributs firstname et lastname.
+                    // return "{$emprunt->getDateEmprunt()->format('m/Y')} {$emprunt->getDateRetour()->format('m/Y')}";
+                },
+                'multiple' => true,
+                'expanded' => true,
+            ])
+        ;
+
         ;
     }
 

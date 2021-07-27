@@ -28,6 +28,15 @@
                 <td>{{ livre.codeIsbn }}</td>
             </tr>
             <tr>
+                <th>Disponibilité</th>
+                {% if livre.isAvailable %}
+                <td class="available">Disponible</td>
+                {% else %}
+                <td class="no-available">Non disponible</td>
+                {% endif %}
+            </tr>
+
+            <tr>
                 <th>Auteur</th>
                 <td>{{ livre.auteur.nom }} {{ livre.auteur.prenom }}</td>
             </tr>

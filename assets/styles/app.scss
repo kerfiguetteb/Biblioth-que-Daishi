@@ -5,5 +5,20 @@ $primary: darken(#7b8abd, 20%);
 @import "~bootstrap/scss/bootstrap";
 
 body {
-    background-color: lightgreen;
+    background-color: rgba(116, 193, 231, 0.527);
+}
+a {
+    color:  #e93b44 ;
+    text-decoration: none;
+}
+
+h1{
+    text-align: center;
+    margin: 20px;
+}
+.available{
+    color: rgb(62, 182, 62);
+}
+.no-available{
+    color: rgb(206, 65, 65);
 }
